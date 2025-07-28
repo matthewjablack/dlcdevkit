@@ -270,6 +270,59 @@ where
         }
     }
 
+    /// Create a new spliced offer
+    pub async fn send_splice_offer(
+        &self,
+        contract_input: &ContractInput,
+        counter_party: PublicKey,
+        contract_id: &ContractId,
+    ) -> Result<OfferDlc, Error> {
+        let oracle_announcements = self.oracle_announcements(contract_input).await?;
+
+        self.send_splice_offer_with_announcements(
+            contract_input,
+            counter_party,
+            contract_id,
+            oracle_announcements,
+        )
+        .await
+    }
+
+    /// Creates a new offer DLC using an existing DLC as an input.
+    /// The new DLC MUST use a Confirmed contract as an input.
+    pub async fn send_splice_offer_with_announcements(
+        &self,
+        contract_input: &ContractInput,
+        counter_party: PublicKey,
+        contract_id: &ContractId,
+        oracle_announcements: Vec<Vec<OracleAnnouncement>>,
+    ) -> Result<OfferDlc, Error> {
+        let confirmed_contract =
+            get_contract_in_state!(self, contract_id, Confirmed, Some(counter_party))?;
+
+        let dlc_input = confirmed_contract.get_dlc_input();
+
+        let (offered_contract, offer_msg) = crate::contract_updater::offer_contract(
+            &self.secp,
+            contract_input,
+            oracle_announcements,
+            vec![dlc_input],
+            REFUND_DELAY,
+            &counter_party,
+            &self.wallet,
+            &self.blockchain,
+            &self.time,
+            &self.signer_provider,
+        )
+        .await?;
+
+        offered_contract.validate()?;
+
+        self.store.create_contract(&offered_contract).await?;
+
+        Ok(offer_msg)
+    }
+
     /// Function called to create a new DLC. The offered contract will be stored
     /// and an OfferDlc message returned.
     ///
@@ -301,6 +354,7 @@ where
             &self.secp,
             contract_input,
             oracle_announcements,
+            vec![],
             REFUND_DELAY,
             &counter_party,
             &self.wallet,
@@ -436,6 +490,7 @@ where
             accept_msg,
             &self.wallet,
             &self.signer_provider,
+            &self.store,
         )
         .await
         {
@@ -475,6 +530,8 @@ where
             &accepted_contract,
             sign_message,
             &self.wallet,
+            &self.store,
+            &self.signer_provider,
         )
         .await
         {
@@ -1562,6 +1619,7 @@ where
                 CET_NSEQUENCE,
                 &self.wallet,
                 &self.signer_provider,
+                &self.store,
                 &self.chain_monitor,
             )
             .await;
@@ -1642,6 +1700,8 @@ where
                 sign_channel,
                 &self.wallet,
                 &self.chain_monitor,
+                &self.store,
+                &self.signer_provider,
             )
             .await;
 
@@ -1913,6 +1973,7 @@ where
             &self.wallet,
             &self.signer_provider,
             &self.time,
+            &self.store,
         )
         .await?;
 
@@ -2000,6 +2061,7 @@ where
             &self.wallet,
             &self.signer_provider,
             &self.chain_monitor,
+            &self.store,
         )
         .await?;
 

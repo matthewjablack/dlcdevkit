@@ -514,6 +514,17 @@ async fn three_of_three_oracle_numerical_with_diff_diff_nb_digits_test() {
 
 #[tokio::test]
 #[ignore]
+async fn single_funded_dlc_test() {
+    manager_execution_test(
+        get_single_funded_test_params(1, 1).await,
+        TestPath::Close,
+        false,
+    )
+    .await;
+}
+
+#[tokio::test]
+#[ignore]
 async fn two_of_five_oracle_numerical_with_diff_diff_nb_digits_test() {
     numerical_common_diff_nb_digits(5, 2, Some(get_difference_params()), false, false).await;
 }
