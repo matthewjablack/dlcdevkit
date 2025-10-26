@@ -52,7 +52,7 @@ use std::sync::Arc;
 use tokio::sync::Mutex;
 
 /// The number of confirmations required before moving the the confirmed state.
-pub const NB_CONFIRMATIONS: u32 = 6;
+pub const NB_CONFIRMATIONS: u32 = 1;
 /// The delay to set the refund value to.
 pub const REFUND_DELAY: u32 = 86400 * 7;
 /// The nSequence value used for CETs in DLC channels
