@@ -361,6 +361,7 @@ where
         dlc_inputs: accept_dlc_inputs.clone(),
         input_amount,
         collateral: accept_msg.accept_collateral,
+        refund_payout: None,
     };
 
     log_debug!(

@@ -179,6 +179,7 @@ where
         dlc_inputs,
         collateral: own_collateral,
         input_amount: total_input,
+        refund_payout: None,
     };
 
     Ok((party_params, funding_inputs))

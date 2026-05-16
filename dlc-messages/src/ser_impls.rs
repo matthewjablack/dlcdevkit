@@ -662,7 +662,8 @@ impl_dlc_writeable_external!(PartyParams, party_params, {
     (inputs, { vec_cb, tx_input_info::write, tx_input_info::read }),
     (dlc_inputs, { vec_cb, dlc_input_info::write, dlc_input_info::read }),
     (input_amount, writeable),
-    (collateral, writeable)
+    (collateral, writeable),
+    (refund_payout, option)
 });
 
 #[cfg(test)]

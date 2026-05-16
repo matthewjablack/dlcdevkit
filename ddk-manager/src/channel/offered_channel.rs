@@ -115,6 +115,7 @@ impl OfferedChannel {
                 inputs,
                 dlc_inputs,
                 input_amount,
+                refund_payout: None,
             },
             cet_locktime: offer_channel.cet_locktime,
             refund_locktime: offer_channel.refund_locktime,

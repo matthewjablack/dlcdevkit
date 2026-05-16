@@ -221,6 +221,8 @@ fn get_party_params<C: Signing>(
             inputs,
             collateral: params.collateral,
             input_amount: total_value,
+            dlc_inputs: vec![],
+            refund_payout: None,
         },
         fund_inputs,
         sks,
@@ -680,6 +682,8 @@ fn test_dlc_fees() {
             payout_serial_id: 0,
             inputs: get_inputs(inputs),
             input_amount: 110000,
+            dlc_inputs: vec![],
+            refund_payout: None,
         }
     };
 

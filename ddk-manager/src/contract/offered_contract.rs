@@ -150,6 +150,7 @@ impl OfferedContract {
                 inputs,
                 dlc_inputs,
                 input_amount,
+                refund_payout: None,
             },
             cet_locktime: offer_dlc.cet_locktime,
             refund_locktime: offer_dlc.refund_locktime,

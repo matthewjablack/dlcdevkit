@@ -193,6 +193,7 @@ fn create_transactions(payouts: &[Payout]) -> DlcTransactions {
         input_amount: Amount::from_sat(300000000),
         collateral: Amount::from_sat(100000000),
         dlc_inputs: vec![],
+        refund_payout: None,
     };
 
     let accept_params = PartyParams {
@@ -205,6 +206,7 @@ fn create_transactions(payouts: &[Payout]) -> DlcTransactions {
         input_amount: Amount::from_sat(300000000),
         collateral: Amount::from_sat(100000000),
         dlc_inputs: vec![],
+        refund_payout: None,
     };
     create_dlc_transactions(&offer_params, &accept_params, payouts, 1000, 2, 0, 1000, 3).unwrap()
 }

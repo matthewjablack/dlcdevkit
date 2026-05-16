@@ -295,6 +295,8 @@ pub struct PartyParams {
     pub input_amount: Amount,
     /// The collateral put in the contract by the party
     pub collateral: Amount,
+    /// Override for the refund transaction payout amount. If None, defaults to collateral.
+    pub refund_payout: Option<Amount>,
 }
 
 impl PartyParams {
@@ -638,12 +640,12 @@ pub fn create_cets_and_refund_tx(
     );
 
     let offer_refund_output = TxOut {
-        value: offer_params.collateral,
+        value: offer_params.refund_payout.unwrap_or(offer_params.collateral),
         script_pubkey: offer_params.payout_script_pubkey.clone(),
     };
 
     let accept_refund_ouput = TxOut {
-        value: accept_params.collateral,
+        value: accept_params.refund_payout.unwrap_or(accept_params.collateral),
         script_pubkey: accept_params.payout_script_pubkey.clone(),
     };
 
@@ -1380,6 +1382,7 @@ mod tests {
                     serial_id,
                 }],
                 dlc_inputs: vec![],
+                refund_payout: None,
             },
             fund_privkey,
         )

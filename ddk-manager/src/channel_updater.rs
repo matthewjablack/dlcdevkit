@@ -321,6 +321,7 @@ where
         dlc_inputs: vec![],
         input_amount,
         collateral: accept_channel.accept_collateral,
+        refund_payout: None,
     };
 
     let accept_points = PartyBasePoints {
